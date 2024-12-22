@@ -1,0 +1,162 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(TalentAnalysisApp());
+}
+
+class TalentAnalysisApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Talent Analysis',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Talent Analysis'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Welcome to the talent analysis app!',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SelfAssessmentScreen()),
+                );
+              },
+              child: Text('Start Self-Assessment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SelfAssessmentScreen extends StatefulWidget {
+  @override
+  _SelfAssessmentScreenState createState() => _SelfAssessmentScreenState();
+}
+
+class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
+  final List<String> questions = [
+    'Do you like working in a team?',
+    'Are you creative?',
+    'Can you solve problems?',
+    'Are you well organized?',
+    'Are you open to new ideas?',
+    'Do you have good communication skills?',
+    'Do you prefer to take risks or be cautious?',
+    'Can you lead people?',
+    'Can you work effectively under pressure?',
+    'Do you strive for continuous learning and self-development?',
+    'Can you adapt quickly to changes?',
+  ];
+
+  final List<bool> answers = List.filled(11, false);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Self-Assessment'),
+      ),
+      body: ListView.builder(
+        itemCount: questions.length,
+        itemBuilder: (context, index) {
+          return CheckboxListTile(
+            title: Text(questions[index]),
+            value: answers[index],
+            onChanged: (bool? value) {
+              setState(() {
+                answers[index] = value!;
+              });
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RecommendationsScreen(answers: answers)),
+          );
+        },
+        child: Icon(Icons.check),
+      ),
+    );
+  }
+}
+
+class RecommendationsScreen extends StatelessWidget {
+  final List<bool> answers;
+
+  RecommendationsScreen({required this.answers});
+
+  @override
+  Widget build(BuildContext context) {
+    String recommendations = '';
+    if (answers[0]) {
+      recommendations += 'You work well in a team. Consider participating in group projects.\n';
+    }
+    if (answers[1]) {
+      recommendations += 'Your creative approach may be useful in design or art.\n';
+    }
+    if (answers[2]) {
+      recommendations += 'Your problem-solving skills may be valuable in analytics.\n';
+    }
+    if (answers[3]) {
+      recommendations += 'Organization will help you in project management.\n';
+    }
+    if (answers[4]) {
+      recommendations += 'Openness to new ideas makes you an ideal candidate for innovative companies.\n';
+    }
+    if (answers[5]) {
+      recommendations += 'Good communication skills are key to success in any field.\n';
+    }
+    if (answers[6]) {
+      recommendations += 'Willingness to take risks may lead you to new opportunities, but be cautious.\n';
+    }
+    if (answers[7]) {
+      recommendations += 'Leadership skills will help you in managing teams or projects.\n';
+    }
+    if (answers[8]) {
+      recommendations += 'The ability to work under pressure is an important skill for success in a dynamic environment.\n';
+    }
+    if (answers[9]) {
+      recommendations += 'A commitment to learning makes you a valuable asset to any organization.\n';
+    }
+    if (answers[10]) {
+      recommendations += 'Adaptability will help you cope with a rapidly changing work environment.\n';
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Recommendations'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          recommendations.isNotEmpty ? recommendations : 'No recommendations.',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+}
